@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: RangedEnemyAnimatorController
+  m_Controller: {fileID: 9100000, guid: 93aef964e25c07b448898af682647c6b, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 5f502da65c07d74498d7b814904944ba, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 5f502da65c07d74498d7b814904944ba, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 7658d74d47303ee4db65d94bd273d695, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 7658d74d47303ee4db65d94bd273d695, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: a37bbefe73b45dd4a8c0d7c22bad6cac, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: a37bbefe73b45dd4a8c0d7c22bad6cac, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 54db06b5a53b27d4daeb0f9f3bd4338a, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e16c806b485f7d84eb5dab4600e21132, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: d5c28de469c75c244a8b4bbfb8f6167e, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: d5c28de469c75c244a8b4bbfb8f6167e, type: 2}
