@@ -197,6 +197,7 @@ MonoBehaviour:
   navMeshAgent: {fileID: 0}
   audioManager: {fileID: 0}
   equipmentManager: {fileID: 0}
+  abilityHolder: {fileID: 0}
   mainRenderer: {fileID: 5005803763262669844}
   IdleHash: 2081823275
   WalkHash: 765711723

@@ -9,7 +9,6 @@ public class AbilityHolder : MonoBehaviour
     private AbilityState state = AbilityState.ready;
     private float cooldownTime;
     private float activeTime;
-    //private PlayerInput playerInput;
 
     public AbilityBase ability;
 
@@ -62,9 +61,9 @@ public class AbilityHolder : MonoBehaviour
         }
     }
 
-    private void ActivateAbility()
+    public void ActivateAbility()
     {
-        if (state == AbilityState.ready /*&& cooldownTime <= 0 && activeTime <= 0*/)
+        if (state == AbilityState.ready && cooldownTime <= 0)
         {
             ability.Activate(gameObject);
             state = AbilityState.active;

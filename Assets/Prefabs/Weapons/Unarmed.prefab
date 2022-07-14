@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 193779a0f615a234d92aeea2eb5d37f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 0}
+  weapon: {fileID: 11400000, guid: f881ae0eaf742f84f8f1c8ed51cf98e2, type: 2}
   slotType: 0
   targetMask:
     serializedVersion: 2

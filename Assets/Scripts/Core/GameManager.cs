@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,13 +7,17 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public GameObject[] characterPrefabs;
+    public Transform spawnPoint;
+    //public TMP_Text label;
     private List<GameObject> _spawnedEnemies;
+    public CinemachineVirtualCamera virtualCamera;
+    private List<GameObject> spawnedMaps = new List<GameObject>();
 
     public GameObject gameOverUI;
     public GameObject player;
-    //public Button button;
-
-    public Transform[] spawnPoints;
+    public GameObject healthBar;
+    public GameObject[] maps;
     public List<GameObject> enemyPrefabs;
     public int maxEnemiesSpawned;
 
@@ -22,9 +27,10 @@ public class GameManager : MonoBehaviour
         gameOverUI.SetActive(false);
 
         _spawnedEnemies = new List<GameObject>();
-        InvokeRepeating("SpawnEnemies", 10, 15);
 
-        //button.onClick.AddListener(RestartScene);
+        SpawnMaps();
+        SpawnPlayer();
+        SpawnEnemies();
     }
 
     // Update is called once per frame
@@ -37,16 +43,35 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void SpawnMaps()
+    {
+        for (int i = 0; i < maps.Length; i++)
+        {
+            var instance = Instantiate(maps[i], maps[i].transform);
+
+            spawnedMaps.Add(instance);
+        }
+    }
+
+    private void SpawnPlayer()
+    {
+        int selectedCharacter = PlayerPrefs.GetInt("selectedCharacterIndex");
+        GameObject prefab = characterPrefabs[selectedCharacter];
+
+        var playerInstance = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
+        virtualCamera.Follow = playerInstance.transform;
+        playerInstance.GetComponent<Damageable>().healthBar = healthBar;
+    }
+
     private void SpawnEnemies()
     {
-        if (_spawnedEnemies.Count < maxEnemiesSpawned)
+        for (int i = 0; i < maxEnemiesSpawned; i++)
         {
-            var points = new List<Transform>(spawnPoints);
-            foreach (var point in points)
-            {
-                var enemy = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Count)], point);
-                _spawnedEnemies.Add(enemy);
-            }
+            var randomPoint = Random.insideUnitSphere;
+            var spawnPoint = new Vector3(randomPoint.x, 0, randomPoint.z) * 50;
+            var prefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Count)];
+            var enemy = Instantiate(prefab, spawnPoint, transform.rotation);
+            _spawnedEnemies.Add(enemy);
         }
     }
 

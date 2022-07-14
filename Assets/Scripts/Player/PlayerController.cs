@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -13,22 +14,17 @@ public class PlayerController : MonoBehaviour
     private EquipmentManager _equipmentManager;
     private Animator _animator;
     private bool _aiming = false;
-
+    private NavMeshAgent _navMeshAgent;
     // Animator parameters
-    private int IdleHash = Animator.StringToHash("Idle");
-    private int MovementSpeedHash = Animator.StringToHash("MovementSpeed");
-    private int WalkHash = Animator.StringToHash("Walk");
-    private int RunHash = Animator.StringToHash("Run");
-    private int AttackHash = Animator.StringToHash("Attack");
-    private int StateTimeHash = Animator.StringToHash("StateTime");
-    private int ShootHash = Animator.StringToHash("Shoot");
-    private int _hashInvoke = Animator.StringToHash("Invoke");
-    private int _hashHit = Animator.StringToHash("Hit");
-    private int _DeathHash = Animator.StringToHash("Death");
-    private int _bowReadyHash = Animator.StringToHash("Draw");
+    private readonly int RunHash = Animator.StringToHash("Run");
+    private readonly int AttackHash = Animator.StringToHash("Attack");
+    private readonly int StateTimeHash = Animator.StringToHash("StateTime");
+    private readonly int DrawBowHash = Animator.StringToHash("Draw");
 
     public CharacterStatsBase characterStats;
     public HealthIndicator healthIndicator;
+
+    public bool PlayerReachedMapBoundaries { get; set; }
 
     private void Awake()
     {
@@ -52,16 +48,14 @@ public class PlayerController : MonoBehaviour
         _animator = GetComponent<Animator>();
 
         //healthIndicator.SetMaxHealth(characterStats.maxHealth);
+        _navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if (_aiming == false)
-        //{
         Move();
         Aim();
-        //}
     }
 
     private void FixedUpdate()
@@ -88,7 +82,7 @@ public class PlayerController : MonoBehaviour
                 _direction *= characterStats.movementSpeed;
 
                 transform.forward = _direction;
-                _controller.Move(_direction * Time.deltaTime);
+                _navMeshAgent.Move(_direction * Time.deltaTime);
                 _animator.SetBool(RunHash, true);
                 FindObjectOfType<AudioManager>().PlaySound("footstep");
 
@@ -110,11 +104,22 @@ public class PlayerController : MonoBehaviour
         var input = _playerInput.actions["Aim"].ReadValue<Vector2>();
         if (input.y != 0 || input.x != 0)
         {
+            //if (input.y > 1 || input.x > 1)
+            //{
+            //Vector2 pos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            //transform.LookAt(position);
+            //var normalizedInput = Vector3.Normalize(input);
+            //_direction = ConvertFromCartesianToIsometric(pos.y, pos.x);
+            //_direction *= characterStats.movementSpeed;
+            //Vector3.Normalize(_direction);
+            //transform.forward = pos;
+            //}
+            //else
+            //{
             _direction = ConvertFromCartesianToIsometric(input.y, input.x);
             //_direction *= characterStats.movementSpeed;
-
             transform.forward = _direction;
-            //transform.LookAt(_direction);
+            //}
         }
     }
 
@@ -130,7 +135,7 @@ public class PlayerController : MonoBehaviour
                 ShootArrow();
             }
 
-            _animator.SetBool(_bowReadyHash, false);
+            _animator.SetBool(DrawBowHash, false);
         }
         else
         {
@@ -168,7 +173,7 @@ public class PlayerController : MonoBehaviour
         if (weapon.WeaponType == WeaponType.Bow)
         {
             _aimTime += Time.time;
-            _animator.SetBool(_bowReadyHash, true);
+            _animator.SetBool(DrawBowHash, true);
         }
     }
 

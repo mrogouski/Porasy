@@ -15,13 +15,17 @@ public class IdleState : IBaseState
 
     public void UpdateState(StateManager stateManager)
     {
-        if (stateManager.TargetDetected)
-        {
-            stateManager.SwitchState(stateManager.PursuitState);
-        }
-        else if (stateManager.GotHit)
+        if (stateManager.GotHit)
         {
             stateManager.SwitchState(stateManager.HitState);
+        }
+        else if (stateManager.IsDead)
+        {
+            stateManager.SwitchState(stateManager.DeadState);
+        }
+        else if (stateManager.TargetDetected)
+        {
+            stateManager.SwitchState(stateManager.PursuitState);
         }
         else
         {

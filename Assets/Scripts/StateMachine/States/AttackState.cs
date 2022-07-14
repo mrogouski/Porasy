@@ -5,15 +5,12 @@ using UnityEngine;
 public class AttackState : IBaseState
 {
     private float _attackCooldown;
-    private float _cooldown;
-    private float _aimTime;
-    private List<GameObject> _minions;
+    private float _abilityCooldown;
 
     public void EnterState(StateManager stateManager)
     {
         Debug.Log("Current State: Attack");
 
-        _minions = new List<GameObject>();
         stateManager.navMeshAgent.isStopped = true;
     }
 
@@ -26,18 +23,27 @@ public class AttackState : IBaseState
     {
         Debug.DrawLine(stateManager.transform.position, stateManager.TargetPosition, Color.red);
 
-        if (stateManager.TargetOnAttackRange)
+        if (stateManager.GotHit)
+        {
+            stateManager.SwitchState(stateManager.HitState);
+        }
+        else if (stateManager.IsDead)
+        {
+            stateManager.SwitchState(stateManager.DeadState);
+        }
+        else if (stateManager.TargetOnAttackRange)
         {
             stateManager.transform.LookAt(stateManager.TargetPosition);
 
-            if (stateManager.CharacterStats.canInvoke && _minions.Count < stateManager.CharacterStats.maxMinions && _cooldown <= 0)
+            if (stateManager.abilityHolder != null && _abilityCooldown <= 0)
             {
-                stateManager.animator.SetTrigger(stateManager.InvokeHash);
-                _cooldown = stateManager.CharacterStats.cooldownTime;
+                //stateManager.animator.SetTrigger(stateManager.InvokeHash);
+                stateManager.abilityHolder.ActivateAbility();
+                _abilityCooldown = stateManager.abilityHolder.ability.cooldownTime;
             }
             else
             {
-                _cooldown -= Time.deltaTime;
+                _abilityCooldown -= Time.deltaTime;
                 var weapon = stateManager.equipmentManager.GetMainHandWeapon();
                 if (weapon.AttackType == AttackType.Ranged && _attackCooldown <= 0)
                 {
@@ -60,10 +66,6 @@ public class AttackState : IBaseState
                 }
             }
         }
-        //else if (stateManager.GotHit)
-        //{
-        //    stateManager.SwitchState(stateManager.HitState);
-        //}
         else
         {
             stateManager.SwitchState(stateManager.PursuitState);

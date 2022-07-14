@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Invoke
   m_EditorClassIdentifier: 
   abilityName: Invoke Minions
-  cooldownTime: 2.5
+  cooldownTime: 30
   activeTime: 0.5
   quantity: 2
   minionPrefab: {fileID: 8305010357592273751, guid: 89155602449a00f408af3771c552ec60,

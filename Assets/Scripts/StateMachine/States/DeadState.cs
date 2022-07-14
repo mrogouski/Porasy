@@ -6,17 +6,17 @@ public class DeadState : IBaseState
 {
     public void EnterState(StateManager stateManager)
     {
-        Debug.Log("Current State: Attack");
-        throw new System.NotImplementedException();
+        Debug.Log("Current State: Death");
+        stateManager.animator.SetTrigger(stateManager.DeathHash);
     }
 
     public void ExitState(StateManager stateManager)
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public void UpdateState(StateManager stateManager)
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 }

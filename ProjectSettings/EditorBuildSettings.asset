@@ -9,10 +9,13 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 9c92915adbe9b3a43aa8d2a633ee9beb
   - enabled: 1
+    path: Assets/Scenes/CharacterSelection.unity
+    guid: 4a78fefc7dc3e284b9c61cdf232a06e7
+  - enabled: 1
     path: Assets/Scenes/Settings.unity
     guid: 0f03484d0bba5e24898440a53afba532
   - enabled: 1
-    path: Assets/Scenes/StartingVillage.unity
+    path: Assets/Scenes/Gameplay.unity
     guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: ef6c9a40ede18294c8346f25069010b9,

@@ -21,6 +21,7 @@ public class StateManager : MonoBehaviour
     [HideInInspector] public NavMeshAgent navMeshAgent;
     [HideInInspector] public AudioManager audioManager;
     [HideInInspector] public EquipmentManager equipmentManager;
+    [HideInInspector] public AbilityHolder abilityHolder;
     public Renderer mainRenderer;
 
     // Animator parameters
@@ -169,12 +170,6 @@ public class StateManager : MonoBehaviour
         GotHit = true;
     }
 
-    public void OnInvokingMinion()
-    {
-        var minion = Instantiate(CharacterStats.minionPrefab, transform, false);
-        _minions.Add(minion);
-    }
-
     private void Initialize()
     {
         animator = gameObject.GetComponent<Animator>();
@@ -192,6 +187,11 @@ public class StateManager : MonoBehaviour
             this.navMeshAgent = navMeshAgent;
         }
 
+        if (gameObject.TryGetComponent(out AbilityHolder abilityHolder))
+        {
+            this.abilityHolder = abilityHolder;
+        }
+
         SpawnPoint = transform.position;
         _currentState = IdleState;
         _currentState.EnterState(this);
@@ -202,7 +202,7 @@ public class StateManager : MonoBehaviour
         var weapon = equipmentManager.GetMainHandWeapon();
         var projectile = Instantiate(weapon.projectilePrefab, transform.position + new Vector3(0, 1, 0), transform.rotation);
         projectile.GetComponent<Projectile>().damage = weapon.Damage;
-        projectile.GetComponent<Projectile>().range = weapon.Damage;
+        projectile.GetComponent<Projectile>().range = weapon.Range;
         projectile.GetComponent<Projectile>().targetMask = equipmentManager.targetLayer;
         Rigidbody rb = projectile.GetComponent<Rigidbody>();
         rb.AddForce(transform.forward * 500f);

@@ -5,12 +5,8 @@ using UnityEngine;
 public class Damageable : MonoBehaviour
 {
     private bool _fadeOut;
-    private Animator _animator;
-    private int _hashHit = Animator.StringToHash("Hit");
-    private int _hashDeath = Animator.StringToHash("Death");
+    private StateManager _stateManager;
 
-    private bool GetHit;
-    private bool IsDead;
     public GameObject healthBar;
     public GameObject damageTextPrefab;
     private float fadeOutRate;
@@ -20,20 +16,23 @@ public class Damageable : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (TryGetComponent(out StateManager stateManager))
+        if (TryGetComponent(out _stateManager))
         {
-            fadeOutRate = stateManager.CharacterStats.fadeOutRate;
-            healthBar.GetComponent<HealthIndicator>().SetMaxHealth(stateManager.CharacterStats.maxHealth);
-            currentHealth = stateManager.CharacterStats.maxHealth;
+            fadeOutRate = _stateManager.CharacterStats.fadeOutRate;
+            healthBar.GetComponent<HealthIndicator>().SetMaxHealth(_stateManager.CharacterStats.maxHealth);
+            currentHealth = _stateManager.CharacterStats.maxHealth;
         }
         else
         {
-            healthBar.GetComponent<HealthIndicator>().SetMaxHealth(GetComponent<PlayerController>().characterStats.maxHealth);
-            currentHealth = GetComponent<PlayerController>().characterStats.maxHealth;
+            if (TryGetComponent(out PlayerController playerController))
+            {
+                if (healthBar != null)
+                {
+                    healthBar.GetComponent<HealthIndicator>().SetMaxHealth(playerController.characterStats.maxHealth);
+                }
+                currentHealth = playerController.characterStats.maxHealth;
+            }
         }
-
-
-        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -47,13 +46,16 @@ public class Damageable : MonoBehaviour
 
     public void InflictDamage(float damage)
     {
-        if (isInvulnerable || IsDead)
+        if (isInvulnerable || currentHealth <= 0)
         {
             Debug.Log($"Target is invulnerable or dead");
             return;
         }
 
-        GetHit = true;
+        if (_stateManager != null)
+        {
+            _stateManager.GotHit = true;
+        }
 
         Debug.Log($"Hit Damage: {damage}");
         currentHealth -= damage;
@@ -63,9 +65,13 @@ public class Damageable : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            IsDead = true;
+            if (_stateManager != null)
+            {
+                _stateManager.IsDead = true;
+            }
+
             _fadeOut = true;
-            _animator.SetTrigger(_hashDeath);
+            //_animator.SetTrigger(DeathHash);
             healthBar.SetActive(false);
             var characterController = GetComponent<CharacterController>();
             characterController.detectCollisions = false;

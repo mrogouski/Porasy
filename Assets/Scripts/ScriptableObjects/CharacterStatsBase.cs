@@ -9,10 +9,4 @@ public class CharacterStatsBase : ScriptableObject
     public CharacterType characterType;
     public float movementSpeed;
     public float maxHealth;
-
-    [Header("Invokers Attributes")]
-    public bool canInvoke;
-    public float cooldownTime;
-    public GameObject minionPrefab;
-    public int maxMinions;
 }

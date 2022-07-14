@@ -20,6 +20,14 @@ public class PursuitState : IBaseState
 
     public void UpdateState(StateManager stateManager)
     {
+        if (stateManager.GotHit)
+        {
+            stateManager.SwitchState(stateManager.HitState);
+        }
+        else if (stateManager.IsDead)
+        {
+            stateManager.SwitchState(stateManager.DeadState);
+        }
         if (stateManager.TargetDetected)
         {
             if (Vector3.Distance(stateManager.transform.position, stateManager.TargetPosition) > stateManager.CharacterStats.stoppingDistance)

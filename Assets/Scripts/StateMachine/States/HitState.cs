@@ -5,11 +5,12 @@ using UnityEngine;
 public class HitState : IBaseState
 {
     private Color originalColor;
-    private float flashingEffectTime = .15f;
+    private readonly float flashingEffectTime = .15f;
 
     public void EnterState(StateManager stateManager)
     {
         Debug.Log("Current State: Hit");
+        stateManager.animator.SetTrigger(stateManager.HitHash);
         stateManager.StartCoroutine(FlashColorOnHit(stateManager));
     }
 
